@@ -8,7 +8,7 @@ import (
 // OptGetRequest 查询商品标签列表 API Request
 type OptGetRequest struct {
 	// ParentCatID 值=0时为顶点cat_id,通过树顶级节点获取cat树
-	ParentCatID uint64 `json:"parent_cat_id"`
+	ParentOptID uint64 `json:"parent_opt_id"`
 }
 
 // GetType implement Request interface
@@ -27,7 +27,7 @@ type OptGetResponse struct {
 // OptGet 查询商品标签列表
 func OptGet(clt *core.SDKClient, parentID uint64) ([]Opt, error) {
 	req := OptGetRequest{
-		ParentCatID: parentID,
+		ParentOptID: parentID,
 	}
 	var resp OptGetResponse
 	if err := clt.Do(req, &resp, ""); err != nil {

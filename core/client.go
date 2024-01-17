@@ -23,6 +23,7 @@ type SDKClient struct {
 	clientID string
 	secret   string
 	dataType model.RequestDataType
+	httpCli  *http.Client
 	gw       string
 	uploadGw string
 	debug    bool
@@ -34,9 +35,14 @@ func NewSDKClient(clientID string, secret string) *SDKClient {
 		clientID: clientID,
 		secret:   secret,
 		gw:       GATEWAY,
+		httpCli:  http.DefaultClient,
 		uploadGw: UPLOAD_GATEWAY,
 		dataType: model.RequestDataType_JSON,
 	}
+}
+
+func (c *SDKClient) SetHTTPClient(httpCli *http.Client) {
+	c.httpCli = httpCli
 }
 
 // SetDebug 设置debug模式
@@ -188,7 +194,7 @@ func (c *SDKClient) upload(req []model.UploadField, resp model.Response) error {
 
 // fetch execute http request
 func (c *SDKClient) fetch(httpReq *http.Request, resp model.Response) error {
-	httpResp, err := http.DefaultClient.Do(httpReq)
+	httpResp, err := c.httpCli.Do(httpReq)
 	if err != nil {
 		return err
 	}
